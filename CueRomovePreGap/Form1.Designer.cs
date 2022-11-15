@@ -32,10 +32,11 @@
             this.label2 = new System.Windows.Forms.Label();
             this.textBoxCueFile = new System.Windows.Forms.TextBox();
             this.buttonSelectFile = new System.Windows.Forms.Button();
-            this.buttonCorrect = new System.Windows.Forms.Button();
+            this.buttonProcess = new System.Windows.Forms.Button();
             this.textBoxMsg1 = new System.Windows.Forms.TextBox();
             this.textBoxMsg2 = new System.Windows.Forms.TextBox();
             this.buttonOpenDirectory = new System.Windows.Forms.Button();
+            this.buttonExit = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label2
@@ -65,16 +66,16 @@
             this.buttonSelectFile.UseVisualStyleBackColor = true;
             this.buttonSelectFile.Click += new System.EventHandler(this.ButtonSelectFile_Click);
             // 
-            // buttonCorrect
+            // buttonProcess
             // 
-            this.buttonCorrect.Enabled = false;
-            this.buttonCorrect.Location = new System.Drawing.Point(750, 13);
-            this.buttonCorrect.Name = "buttonCorrect";
-            this.buttonCorrect.Size = new System.Drawing.Size(61, 23);
-            this.buttonCorrect.TabIndex = 4;
-            this.buttonCorrect.Text = "Correct";
-            this.buttonCorrect.UseVisualStyleBackColor = true;
-            this.buttonCorrect.Click += new System.EventHandler(this.ButtonCorrect_Click);
+            this.buttonProcess.Enabled = false;
+            this.buttonProcess.Location = new System.Drawing.Point(750, 13);
+            this.buttonProcess.Name = "buttonProcess";
+            this.buttonProcess.Size = new System.Drawing.Size(61, 23);
+            this.buttonProcess.TabIndex = 4;
+            this.buttonProcess.Text = "&Process";
+            this.buttonProcess.UseVisualStyleBackColor = true;
+            this.buttonProcess.Click += new System.EventHandler(this.ButtonProcess_Click);
             // 
             // textBoxMsg1
             // 
@@ -103,16 +104,30 @@
             this.buttonOpenDirectory.UseVisualStyleBackColor = true;
             this.buttonOpenDirectory.Click += new System.EventHandler(this.ButtonOpenDirectory_Click);
             // 
+            // buttonExit
+            // 
+            this.buttonExit.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.buttonExit.Location = new System.Drawing.Point(750, 42);
+            this.buttonExit.Name = "buttonExit";
+            this.buttonExit.Size = new System.Drawing.Size(61, 23);
+            this.buttonExit.TabIndex = 8;
+            this.buttonExit.Text = "&Close";
+            this.buttonExit.UseVisualStyleBackColor = true;
+            this.buttonExit.Click += new System.EventHandler(this.ButtonClose_Click);
+            // 
             // Form1
             // 
+            this.AcceptButton = this.buttonProcess;
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.buttonExit;
             this.ClientSize = new System.Drawing.Size(826, 111);
+            this.Controls.Add(this.buttonExit);
             this.Controls.Add(this.buttonOpenDirectory);
             this.Controls.Add(this.textBoxMsg2);
             this.Controls.Add(this.textBoxMsg1);
-            this.Controls.Add(this.buttonCorrect);
+            this.Controls.Add(this.buttonProcess);
             this.Controls.Add(this.buttonSelectFile);
             this.Controls.Add(this.textBoxCueFile);
             this.Controls.Add(this.label2);
@@ -120,7 +135,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Romove \'PreGap\' from Cue File";
+            this.Text = "Remove \'PreGap\' from Cue File";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.Form1_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.Form1_DragEnter);
@@ -138,10 +153,11 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBoxCueFile;
         private System.Windows.Forms.Button buttonSelectFile;
-        private System.Windows.Forms.Button buttonCorrect;
+        private System.Windows.Forms.Button buttonProcess;
         private System.Windows.Forms.TextBox textBoxMsg1;
         private System.Windows.Forms.TextBox textBoxMsg2;
         private System.Windows.Forms.Button buttonOpenDirectory;
+        private System.Windows.Forms.Button buttonExit;
     }
 }
 

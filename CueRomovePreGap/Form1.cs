@@ -15,7 +15,8 @@ namespace CueRomovePreGap
 {
     public partial class Form1 : Form
     {
-        private readonly string outFile = "Corrected.cue";
+        private readonly string outFileName = "_Corrected.cue";
+        private ProcessFile _processFile;
 
         public Form1(string[] args)
         {
@@ -27,7 +28,9 @@ namespace CueRomovePreGap
             if (args.Length == 1)
                 if (IsCueExtension(args[0]))
                     textBoxCueFile.Text = args[0];
-        }
+
+            _processFile = new ProcessFile();
+         }
 
         private void Form1_DragDrop(object sender, DragEventArgs e)
         {
@@ -62,18 +65,18 @@ namespace CueRomovePreGap
 
         private void Form1_DragOver(object sender, DragEventArgs e)
         {
-            //quando and por dentro do objecto
+            //quando anda por dentro do objecto
             //System.Diagnostics.Debug.WriteLine("Form1_DragOver");
         }
 
         private void Form1_GiveFeedback(object sender, GiveFeedbackEventArgs e)
         {
-            // System.Diagnostics.Debug.WriteLine("Form1_GiveFeedback");
+            System.Diagnostics.Debug.WriteLine("Form1_GiveFeedback");
         }
 
         private void Form1_QueryContinueDrag(object sender, QueryContinueDragEventArgs e)
         {
-            //System.Diagnostics.Debug.WriteLine("Form1_QueryContinueDrag");
+            System.Diagnostics.Debug.WriteLine("Form1_QueryContinueDrag");
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -81,80 +84,25 @@ namespace CueRomovePreGap
             InitializeFields();
         }
 
-        private void ButtonCorrect_Click(object sender, EventArgs e)
+        private void ButtonProcess_Click(object sender, EventArgs e)
         {
             textBoxMsg1.Text = "";
             textBoxMsg2.Text = "";
+            Cursor = Cursors.WaitCursor;
 
-            //read
-            List<string> list = new List<string>();
-            String line;
             try
             {
-                StreamReader streamReader = new StreamReader(textBoxCueFile.Text);
-                line = streamReader.ReadLine();
-                while (line != null)
-                {
-                    list.Add(line);
-                    line = streamReader.ReadLine();
-                }
-                streamReader.Close();
+                string newFileName = _processFile.Execute(textBoxCueFile.Text, outFileName);
+                textBoxMsg1.Text = $"New File '{outFileName}' Created At:";
+                textBoxMsg2.Text = newFileName;
             }
             catch (Exception ex)
             {
                 textBoxMsg1.Text = "Error:" + ex.Message;
-                return;
             }
-
-            //process
-            try
-            {
-                int count = list.Count;
-                for (int inx = 0; inx < count; inx++)
-                {
-                    if (String.IsNullOrEmpty(list[inx]))
-                        continue;
-
-                    if (list[inx].Contains("INDEX 00"))
-                    {
-                        list[inx] = list[inx].Replace("INDEX 00", "INDEX 01");
-                        list[inx + 1] = null;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                textBoxMsg1.Text = "Error:" + ex.Message;
-                return;
-            }
-
-            //write
-            string newFile;
-            try
-            {
-                string dir = Path.GetDirectoryName(textBoxCueFile.Text);
-                newFile = Path.Combine(dir, outFile);
-
-                StreamWriter streamWriter = new StreamWriter(newFile);
-                foreach (string nline in list)
-                {
-                    if (!String.IsNullOrEmpty(nline))
-                        streamWriter.WriteLine(nline);
-                }
-
-                streamWriter.Flush();
-                streamWriter.Close();
-            }
-            catch (Exception ex)
-            {
-                textBoxMsg1.Text = "Error:" + ex.Message;
-                return;
-            }
-
-            textBoxMsg1.Text = "New File 'Corrected.cue' Created At:";
-            textBoxMsg2.Text = newFile;
 
             buttonOpenDirectory.Enabled = true;
+            Cursor = Cursors.Default;
         }
 
         private void ButtonSelectFile_Click(object sender, EventArgs e)
@@ -180,7 +128,7 @@ namespace CueRomovePreGap
 
         private void TextBoxCueFile_TextChanged(object sender, EventArgs e)
         {
-            buttonCorrect.Enabled = (textBoxCueFile.TextLength > 0);
+            buttonProcess.Enabled = (textBoxCueFile.TextLength > 0);
             buttonOpenDirectory.Enabled = false;
             textBoxMsg1.Text = "";
             textBoxMsg2.Text = "";
@@ -189,7 +137,7 @@ namespace CueRomovePreGap
         private void ButtonOpenDirectory_Click(object sender, EventArgs e)
         {
             string dir = Path.GetDirectoryName(textBoxCueFile.Text);
-            string newFile = Path.Combine(dir, outFile);
+            string newFile = Path.Combine(dir, outFileName);
 
             if (Directory.Exists(dir))
             {
@@ -199,10 +147,15 @@ namespace CueRomovePreGap
             }
         }
 
+        private void ButtonClose_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
         private void InitializeFields()
         {
             textBoxCueFile.Text = "";
-            buttonCorrect.Enabled = false;
+            buttonProcess.Enabled = false;
             textBoxMsg1.Text = "";
             textBoxMsg2.Text = "";
             buttonOpenDirectory.Enabled = false;
@@ -225,6 +178,5 @@ namespace CueRomovePreGap
             string extension = System.IO.Path.GetExtension(data);
             return (extension.ToUpper() == ".CUE");
         }
-
     }
 }
