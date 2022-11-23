@@ -10,9 +10,9 @@ namespace CueRomovePreGap
 {
     internal class ProcessFile
     {
-        public string Execute(string fullFileName, string newFileName)
+        public ProcessFileOutput Execute(ProcessFileInput input)
         {
-            string newFullFileName;
+            var output = new ProcessFileOutput();
 
             try
             {
@@ -20,7 +20,7 @@ namespace CueRomovePreGap
                 List<string> list = new List<string>();
                 String line;
 
-                StreamReader streamReader = new StreamReader(fullFileName);
+                StreamReader streamReader = new StreamReader(input.FullFileName);
                 line = streamReader.ReadLine();
                 while (line != null)
                 {
@@ -40,14 +40,15 @@ namespace CueRomovePreGap
                     {
                         list[inx] = list[inx].Replace("INDEX 00", "INDEX 01");
                         list[inx + 1] = null;
+                        output.ChangeCount++;
                     }
                 }
 
                 //write new file
-                string dir = Path.GetDirectoryName(fullFileName);
-                newFullFileName = Path.Combine(dir, newFileName);
+                string dir = Path.GetDirectoryName(input.FullFileName);
+                output.NewFullFileName = Path.Combine(dir, input.NewFileName);
 
-                StreamWriter streamWriter = new StreamWriter(newFullFileName);
+                StreamWriter streamWriter = new StreamWriter(output.NewFullFileName);
                 foreach (string nline in list)
                 {
                     if (!String.IsNullOrEmpty(nline))
@@ -62,7 +63,7 @@ namespace CueRomovePreGap
                 throw ex;
             }
 
-            return newFullFileName;
+            return output;
         }
     }
 }

@@ -34,9 +34,11 @@
             this.buttonSelectFile = new System.Windows.Forms.Button();
             this.buttonProcess = new System.Windows.Forms.Button();
             this.textBoxMsg1 = new System.Windows.Forms.TextBox();
-            this.textBoxMsg2 = new System.Windows.Forms.TextBox();
+            this.textBoxMsg3 = new System.Windows.Forms.TextBox();
             this.buttonOpenDirectory = new System.Windows.Forms.Button();
             this.buttonExit = new System.Windows.Forms.Button();
+            this.textBoxMsg2 = new System.Windows.Forms.TextBox();
+            this.checkBoxAutoRun = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label2
@@ -82,21 +84,21 @@
             this.textBoxMsg1.Location = new System.Drawing.Point(12, 51);
             this.textBoxMsg1.Name = "textBoxMsg1";
             this.textBoxMsg1.ReadOnly = true;
-            this.textBoxMsg1.Size = new System.Drawing.Size(696, 20);
+            this.textBoxMsg1.Size = new System.Drawing.Size(526, 20);
             this.textBoxMsg1.TabIndex = 5;
             // 
-            // textBoxMsg2
+            // textBoxMsg3
             // 
-            this.textBoxMsg2.Location = new System.Drawing.Point(12, 77);
-            this.textBoxMsg2.Name = "textBoxMsg2";
-            this.textBoxMsg2.ReadOnly = true;
-            this.textBoxMsg2.Size = new System.Drawing.Size(696, 20);
-            this.textBoxMsg2.TabIndex = 6;
+            this.textBoxMsg3.Location = new System.Drawing.Point(12, 103);
+            this.textBoxMsg3.Name = "textBoxMsg3";
+            this.textBoxMsg3.ReadOnly = true;
+            this.textBoxMsg3.Size = new System.Drawing.Size(696, 20);
+            this.textBoxMsg3.TabIndex = 6;
             // 
             // buttonOpenDirectory
             // 
             this.buttonOpenDirectory.Enabled = false;
-            this.buttonOpenDirectory.Location = new System.Drawing.Point(714, 76);
+            this.buttonOpenDirectory.Location = new System.Drawing.Point(714, 102);
             this.buttonOpenDirectory.Name = "buttonOpenDirectory";
             this.buttonOpenDirectory.Size = new System.Drawing.Size(30, 23);
             this.buttonOpenDirectory.TabIndex = 7;
@@ -107,13 +109,32 @@
             // buttonExit
             // 
             this.buttonExit.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonExit.Location = new System.Drawing.Point(750, 42);
+            this.buttonExit.Location = new System.Drawing.Point(750, 49);
             this.buttonExit.Name = "buttonExit";
             this.buttonExit.Size = new System.Drawing.Size(61, 23);
             this.buttonExit.TabIndex = 8;
             this.buttonExit.Text = "&Close";
             this.buttonExit.UseVisualStyleBackColor = true;
             this.buttonExit.Click += new System.EventHandler(this.ButtonClose_Click);
+            // 
+            // textBoxMsg2
+            // 
+            this.textBoxMsg2.Location = new System.Drawing.Point(12, 77);
+            this.textBoxMsg2.Name = "textBoxMsg2";
+            this.textBoxMsg2.ReadOnly = true;
+            this.textBoxMsg2.Size = new System.Drawing.Size(526, 20);
+            this.textBoxMsg2.TabIndex = 9;
+            // 
+            // checkBoxAutoRun
+            // 
+            this.checkBoxAutoRun.AutoSize = true;
+            this.checkBoxAutoRun.Location = new System.Drawing.Point(581, 53);
+            this.checkBoxAutoRun.Name = "checkBoxAutoRun";
+            this.checkBoxAutoRun.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBoxAutoRun.Size = new System.Drawing.Size(127, 17);
+            this.checkBoxAutoRun.TabIndex = 10;
+            this.checkBoxAutoRun.Text = "Run After \'Drag Drop\'";
+            this.checkBoxAutoRun.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -122,10 +143,12 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonExit;
-            this.ClientSize = new System.Drawing.Size(826, 111);
+            this.ClientSize = new System.Drawing.Size(826, 134);
+            this.Controls.Add(this.checkBoxAutoRun);
+            this.Controls.Add(this.textBoxMsg2);
             this.Controls.Add(this.buttonExit);
             this.Controls.Add(this.buttonOpenDirectory);
-            this.Controls.Add(this.textBoxMsg2);
+            this.Controls.Add(this.textBoxMsg3);
             this.Controls.Add(this.textBoxMsg1);
             this.Controls.Add(this.buttonProcess);
             this.Controls.Add(this.buttonSelectFile);
@@ -155,9 +178,11 @@
         private System.Windows.Forms.Button buttonSelectFile;
         private System.Windows.Forms.Button buttonProcess;
         private System.Windows.Forms.TextBox textBoxMsg1;
-        private System.Windows.Forms.TextBox textBoxMsg2;
+        private System.Windows.Forms.TextBox textBoxMsg3;
         private System.Windows.Forms.Button buttonOpenDirectory;
         private System.Windows.Forms.Button buttonExit;
+        private System.Windows.Forms.TextBox textBoxMsg2;
+        private System.Windows.Forms.CheckBox checkBoxAutoRun;
     }
 }
 

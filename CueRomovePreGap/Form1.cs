@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Lifetime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -15,7 +16,8 @@ namespace CueRomovePreGap
 {
     public partial class Form1 : Form
     {
-        private readonly string outFileName = "_Corrected.cue";
+        private const string DefaultOutputFileName = "_Corrected.cue";
+
         private ProcessFile _processFile;
 
         public Form1(string[] args)
@@ -24,6 +26,8 @@ namespace CueRomovePreGap
 
             textBoxMsg1.BorderStyle = BorderStyle.None;
             textBoxMsg2.BorderStyle = BorderStyle.None;
+            textBoxMsg3.BorderStyle = BorderStyle.None;
+            buttonOpenDirectory.Visible = false;
 
             if (args.Length == 1)
                 if (IsCueExtension(args[0]))
@@ -34,14 +38,20 @@ namespace CueRomovePreGap
 
         private void Form1_DragDrop(object sender, DragEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Form1_DragDrop");
+            //System.Diagnostics.Debug.WriteLine("Form1_DragDrop");
 
             string file = ValidFile(e);
-            if (file == null)
-                return;
 
-            Console.WriteLine(file);
-            this.textBoxCueFile.Text = file;
+            if (String.IsNullOrEmpty(file))
+                this.textBoxCueFile.Text = String.Empty;
+            else
+            {
+                this.textBoxCueFile.Text = file;
+                if (checkBoxAutoRun.Checked)
+                    ButtonProcess_Click(sender, null);
+            }
+            
+            //System.Diagnostics.Debug.WriteLine(file);
         }
 
         private void Form1_DragEnter(object sender, DragEventArgs e)
@@ -54,18 +64,18 @@ namespace CueRomovePreGap
 
             }
 
-            System.Diagnostics.Debug.WriteLine("Form1_DragEnter");
+            //System.Diagnostics.Debug.WriteLine("Form1_DragEnter");
         }
 
         private void Form1_DragLeave(object sender, EventArgs e)
         {
-            //quando sai e nao faz drop (quando desiste)
+            //when you leave and do not drop(give up)
             //System.Diagnostics.Debug.WriteLine("Form1_DragLeave");
         }
 
         private void Form1_DragOver(object sender, DragEventArgs e)
         {
-            //quando anda por dentro do objecto
+            //when the mouse "walks" inside the object
             //System.Diagnostics.Debug.WriteLine("Form1_DragOver");
         }
 
@@ -81,20 +91,34 @@ namespace CueRomovePreGap
 
         private void Form1_Load(object sender, EventArgs e)
         {
+
+            Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            Text = $"{Text} - Version: {version}";
+
             InitializeFields();
         }
 
         private void ButtonProcess_Click(object sender, EventArgs e)
         {
-            textBoxMsg1.Text = "";
-            textBoxMsg2.Text = "";
+            ClearMessages();
+
             Cursor = Cursors.WaitCursor;
+            Application.DoEvents();
 
             try
             {
-                string newFileName = _processFile.Execute(textBoxCueFile.Text, outFileName);
-                textBoxMsg1.Text = $"New File '{outFileName}' Created At:";
-                textBoxMsg2.Text = newFileName;
+                var input = new ProcessFileInput()
+                {
+                    FullFileName = textBoxCueFile.Text,
+                    NewFileName = DefaultOutputFileName
+                };
+
+                var output = _processFile.Execute(input);
+
+                textBoxMsg1.Text = $"Total PreGap found: {output.ChangeCount}.";
+                textBoxMsg2.Text = $"New File '{DefaultOutputFileName}' Created At:";
+                textBoxMsg3.Text = output.NewFullFileName;
+                buttonOpenDirectory.Visible = true;
             }
             catch (Exception ex)
             {
@@ -103,11 +127,12 @@ namespace CueRomovePreGap
 
             buttonOpenDirectory.Enabled = true;
             Cursor = Cursors.Default;
+            Application.DoEvents();
         }
 
         private void ButtonSelectFile_Click(object sender, EventArgs e)
         {
-            textBoxCueFile.Text = "";
+            textBoxCueFile.Text = String.Empty;
 
             OpenFileDialog dlg = new OpenFileDialog();
 
@@ -130,14 +155,14 @@ namespace CueRomovePreGap
         {
             buttonProcess.Enabled = (textBoxCueFile.TextLength > 0);
             buttonOpenDirectory.Enabled = false;
-            textBoxMsg1.Text = "";
-            textBoxMsg2.Text = "";
+            ClearMessages();
+
         }
 
         private void ButtonOpenDirectory_Click(object sender, EventArgs e)
         {
             string dir = Path.GetDirectoryName(textBoxCueFile.Text);
-            string newFile = Path.Combine(dir, outFileName);
+            string newFile = Path.Combine(dir, DefaultOutputFileName);
 
             if (Directory.Exists(dir))
             {
@@ -152,12 +177,21 @@ namespace CueRomovePreGap
             Close();
         }
 
+        private void ClearMessages()
+        {
+            textBoxMsg1.Text = String.Empty;
+            textBoxMsg2.Text = String.Empty;
+            textBoxMsg3.Text = String.Empty;
+
+            buttonOpenDirectory.Visible = false;
+        }
+
         private void InitializeFields()
         {
-            textBoxCueFile.Text = "";
+            textBoxCueFile.Text = String.Empty;
+            ClearMessages();
             buttonProcess.Enabled = false;
-            textBoxMsg1.Text = "";
-            textBoxMsg2.Text = "";
+
             buttonOpenDirectory.Enabled = false;
         }
 
