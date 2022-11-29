@@ -87,7 +87,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Mattahan-Buuf-Theme-Settings.ico" />
-    <Content Include="Saki-NuoveXT-2-Categories-application-development.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
