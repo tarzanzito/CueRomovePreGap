@@ -10,5 +10,6 @@ namespace CueRomovePreGap
     {
         public string FullFileName { get; set; }
         public string NewFileName { get; set; }
+        public bool RemoveSubIndexes { get; set; }
     }
 }

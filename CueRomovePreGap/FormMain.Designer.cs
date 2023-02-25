@@ -1,6 +1,6 @@
 ﻿namespace CueRomovePreGap
 {
-    partial class Form1
+    partial class FormMain
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.label2 = new System.Windows.Forms.Label();
             this.textBoxCueFile = new System.Windows.Forms.TextBox();
             this.buttonSelectFile = new System.Windows.Forms.Button();
@@ -39,12 +39,12 @@
             this.buttonExit = new System.Windows.Forms.Button();
             this.textBoxMsg2 = new System.Windows.Forms.TextBox();
             this.checkBoxAutoRun = new System.Windows.Forms.CheckBox();
+            this.checkBoxRemoveSubIndexes = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label2
             // 
-            this.label2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label2.Location = new System.Drawing.Point(12, 17);
+            this.label2.Location = new System.Drawing.Point(12, 18);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(61, 16);
             this.label2.TabIndex = 1;
@@ -71,7 +71,7 @@
             // buttonProcess
             // 
             this.buttonProcess.Enabled = false;
-            this.buttonProcess.Location = new System.Drawing.Point(750, 13);
+            this.buttonProcess.Location = new System.Drawing.Point(766, 13);
             this.buttonProcess.Name = "buttonProcess";
             this.buttonProcess.Size = new System.Drawing.Size(61, 23);
             this.buttonProcess.TabIndex = 4;
@@ -109,7 +109,7 @@
             // buttonExit
             // 
             this.buttonExit.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonExit.Location = new System.Drawing.Point(750, 49);
+            this.buttonExit.Location = new System.Drawing.Point(766, 49);
             this.buttonExit.Name = "buttonExit";
             this.buttonExit.Size = new System.Drawing.Size(61, 23);
             this.buttonExit.TabIndex = 8;
@@ -128,22 +128,36 @@
             // checkBoxAutoRun
             // 
             this.checkBoxAutoRun.AutoSize = true;
-            this.checkBoxAutoRun.Location = new System.Drawing.Point(581, 53);
+            this.checkBoxAutoRun.Location = new System.Drawing.Point(562, 53);
             this.checkBoxAutoRun.Name = "checkBoxAutoRun";
             this.checkBoxAutoRun.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.checkBoxAutoRun.Size = new System.Drawing.Size(127, 17);
+            this.checkBoxAutoRun.Size = new System.Drawing.Size(182, 17);
             this.checkBoxAutoRun.TabIndex = 10;
-            this.checkBoxAutoRun.Text = "Run After \'Drag Drop\'";
+            this.checkBoxAutoRun.Text = "Run immediately after: Drag Drop";
             this.checkBoxAutoRun.UseVisualStyleBackColor = true;
             // 
-            // Form1
+            // checkBoxRemoveSubIndexes
+            // 
+            this.checkBoxRemoveSubIndexes.AutoSize = true;
+            this.checkBoxRemoveSubIndexes.Checked = true;
+            this.checkBoxRemoveSubIndexes.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxRemoveSubIndexes.Location = new System.Drawing.Point(573, 80);
+            this.checkBoxRemoveSubIndexes.Name = "checkBoxRemoveSubIndexes";
+            this.checkBoxRemoveSubIndexes.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.checkBoxRemoveSubIndexes.Size = new System.Drawing.Size(171, 17);
+            this.checkBoxRemoveSubIndexes.TabIndex = 11;
+            this.checkBoxRemoveSubIndexes.Text = "Remove Sub-Indexes in tracks";
+            this.checkBoxRemoveSubIndexes.UseVisualStyleBackColor = true;
+            // 
+            // FormMain
             // 
             this.AcceptButton = this.buttonProcess;
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonExit;
-            this.ClientSize = new System.Drawing.Size(826, 134);
+            this.ClientSize = new System.Drawing.Size(837, 134);
+            this.Controls.Add(this.checkBoxRemoveSubIndexes);
             this.Controls.Add(this.checkBoxAutoRun);
             this.Controls.Add(this.textBoxMsg2);
             this.Controls.Add(this.buttonExit);
@@ -156,16 +170,16 @@
             this.Controls.Add(this.label2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Form1";
+            this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Remove \'PreGap\' from Cue File";
-            this.Load += new System.EventHandler(this.Form1_Load);
-            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.Form1_DragDrop);
-            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.Form1_DragEnter);
-            this.DragOver += new System.Windows.Forms.DragEventHandler(this.Form1_DragOver);
-            this.DragLeave += new System.EventHandler(this.Form1_DragLeave);
-            this.GiveFeedback += new System.Windows.Forms.GiveFeedbackEventHandler(this.Form1_GiveFeedback);
-            this.QueryContinueDrag += new System.Windows.Forms.QueryContinueDragEventHandler(this.Form1_QueryContinueDrag);
+            this.Load += new System.EventHandler(this.FormMain_Load);
+            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.FormMain_DragDrop);
+            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.FormMain_DragEnter);
+            this.DragOver += new System.Windows.Forms.DragEventHandler(this.FormMain_DragOver);
+            this.DragLeave += new System.EventHandler(this.FormMain_DragLeave);
+            this.GiveFeedback += new System.Windows.Forms.GiveFeedbackEventHandler(this.FormMain_GiveFeedback);
+            this.QueryContinueDrag += new System.Windows.Forms.QueryContinueDragEventHandler(this.FormMain_QueryContinueDrag);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -183,6 +197,7 @@
         private System.Windows.Forms.Button buttonExit;
         private System.Windows.Forms.TextBox textBoxMsg2;
         private System.Windows.Forms.CheckBox checkBoxAutoRun;
+        private System.Windows.Forms.CheckBox checkBoxRemoveSubIndexes;
     }
 }
 

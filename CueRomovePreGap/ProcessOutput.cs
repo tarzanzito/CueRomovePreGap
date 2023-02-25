@@ -9,6 +9,7 @@ namespace CueRomovePreGap
     internal class ProcessFileOutput
     {
         public string NewFullFileName { get; set; }
-        public int ChangeCount { get; set; } = 0;
+        public int ChangeCount { get; set; }
+        public int TrackCount { get; set; }
     }
 }

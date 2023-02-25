@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CueRomovePreGap.Properties;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,13 +15,13 @@ using System.Xml.Linq;
 
 namespace CueRomovePreGap
 {
-    public partial class Form1 : Form
+    public partial class FormMain : Form
     {
         private const string DefaultOutputFileName = "_Corrected.cue";
 
         private ProcessFile _processFile;
 
-        public Form1(string[] args)
+        public FormMain(string[] args)
         {
             InitializeComponent();
 
@@ -36,7 +37,7 @@ namespace CueRomovePreGap
             _processFile = new ProcessFile();
          }
 
-        private void Form1_DragDrop(object sender, DragEventArgs e)
+        private void FormMain_DragDrop(object sender, DragEventArgs e)
         {
             //System.Diagnostics.Debug.WriteLine("Form1_DragDrop");
 
@@ -54,7 +55,7 @@ namespace CueRomovePreGap
             //System.Diagnostics.Debug.WriteLine(file);
         }
 
-        private void Form1_DragEnter(object sender, DragEventArgs e)
+        private void FormMain_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
@@ -67,35 +68,38 @@ namespace CueRomovePreGap
             //System.Diagnostics.Debug.WriteLine("Form1_DragEnter");
         }
 
-        private void Form1_DragLeave(object sender, EventArgs e)
+        private void FormMain_DragLeave(object sender, EventArgs e)
         {
             //when you leave and do not drop(give up)
             //System.Diagnostics.Debug.WriteLine("Form1_DragLeave");
         }
 
-        private void Form1_DragOver(object sender, DragEventArgs e)
+        private void FormMain_DragOver(object sender, DragEventArgs e)
         {
             //when the mouse "walks" inside the object
             //System.Diagnostics.Debug.WriteLine("Form1_DragOver");
         }
 
-        private void Form1_GiveFeedback(object sender, GiveFeedbackEventArgs e)
+        private void FormMain_GiveFeedback(object sender, GiveFeedbackEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("Form1_GiveFeedback");
         }
 
-        private void Form1_QueryContinueDrag(object sender, QueryContinueDragEventArgs e)
+        private void FormMain_QueryContinueDrag(object sender, QueryContinueDragEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("Form1_QueryContinueDrag");
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void FormMain_Load(object sender, EventArgs e)
         {
+            InitializeFields();
 
             Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
             Text = $"{Text} - Version: {version}";
 
-            InitializeFields();
+#if DEBUG
+            textBoxCueFile.Text = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), @"..\..", @"Resources\ExampleWithSubIndexs.cue");
+#endif
         }
 
         private void ButtonProcess_Click(object sender, EventArgs e)
@@ -110,19 +114,21 @@ namespace CueRomovePreGap
                 var input = new ProcessFileInput()
                 {
                     FullFileName = textBoxCueFile.Text,
-                    NewFileName = DefaultOutputFileName
+                    NewFileName = DefaultOutputFileName,
+                    RemoveSubIndexes = checkBoxRemoveSubIndexes.Checked
                 };
 
                 var output = _processFile.Execute(input);
 
-                textBoxMsg1.Text = $"Total PreGap found: {output.ChangeCount}.";
+                textBoxMsg1.Text = $"Total Tracks: [{output.TrackCount}], Total PreGap found: [{output.ChangeCount}].";
                 textBoxMsg2.Text = $"New File '{DefaultOutputFileName}' Created At:";
                 textBoxMsg3.Text = output.NewFullFileName;
                 buttonOpenDirectory.Visible = true;
             }
             catch (Exception ex)
             {
-                textBoxMsg1.Text = "Error:" + ex.Message;
+                //textBoxMsg1.Text = "Error:" + ex.Message;
+                MessageBox.Show(ex.Message, "Error.", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
 
             buttonOpenDirectory.Enabled = true;
