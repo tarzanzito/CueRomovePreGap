@@ -1,13 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Net.WebRequestMethods;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
 
 namespace CueRomovePreGap
 {
@@ -16,72 +9,103 @@ namespace CueRomovePreGap
         private const string _TRACK = "TRACK";
         private const string _INDEX = "INDEX";
 
-        public ProcessFileOutput Execute(ProcessFileInput input)
+        private ProcessFileInput _processFileInput;
+        private ProcessFileOutput _processFileOutput;
+        private List<string> _lineList;
+
+        public ProcessFileOutput Execute(ProcessFileInput processFileInput)
         {
-            var output = new ProcessFileOutput();
+            _processFileInput = processFileInput;
+            _processFileOutput = new ProcessFileOutput();
 
             try
             {
-                //read file
-                List<string> list = new List<string>();
-                String line;
+                _lineList = new List<string>();
 
-                StreamReader streamReader = new StreamReader(input.FullFileName);
+                ReadFile();
+
+                Process();
+
+                WriteFile();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return _processFileOutput;
+        }
+
+        private void Process()
+        {
+            int trackIdFound = 0;
+            int indexIdFound = 0;
+
+            int count = _lineList.Count;
+            for (int inx = 0; inx < count; inx++)
+            {
+                if (String.IsNullOrEmpty(_lineList[inx]))
+                    continue;
+
+                trackIdFound = GetTrackId(_lineList[inx], inx);
+
+                if (trackIdFound >= 0)
+                {
+                    _processFileOutput.TrackCount = trackIdFound;
+                    continue;
+                }
+
+                indexIdFound = GetIndexId(_lineList[inx], inx);
+
+                if (indexIdFound < 0)
+                    continue;
+
+                if (indexIdFound == 0)
+                {
+                    string oldValue = $"{_INDEX} 00";
+                    string newValue = $"{_INDEX} 01";
+                    _lineList[inx] = _lineList[inx].Replace(oldValue, newValue);
+                    _lineList[inx + 1] = null; //remove next
+                    _processFileOutput.ChangeCount++;
+                    continue;
+                }
+
+                if (indexIdFound > 1)
+                {
+                    if (_processFileInput.RemoveSubIndexes)
+                        _lineList[inx] = null;
+                    continue;
+                }
+            }
+        }
+
+
+        private void ReadFile()
+        {
+            String line;
+
+            using (StreamReader streamReader = new StreamReader(_processFileInput.FullFileName))
+            {
                 line = streamReader.ReadLine();
                 while (line != null)
                 {
-                    list.Add(line);
+                    _lineList.Add(line);
                     line = streamReader.ReadLine();
                 }
                 streamReader.Close();
+            }
+        }
 
-                //process
-                int trackIdFound = 0;
-                int indexIdFound = 0;
+        private void WriteFile()
+        {
 
-                int count = list.Count;
-                for (int inx = 0; inx < count; inx++)
-                {
-                    if (String.IsNullOrEmpty(list[inx]))
-                        continue;
+            string dir = Path.GetDirectoryName(_processFileInput.FullFileName);
+            _processFileOutput.NewFullFileName = Path.Combine(dir, _processFileInput.NewFileName);
 
-                    trackIdFound = GetTrackId(list[inx], inx);
-
-                    if (trackIdFound >= 0)
-                    {
-                        output.TrackCount = trackIdFound;
-                        continue;
-                    }
-
-                    indexIdFound = GetIndexId(list[inx], inx);
-
-                    if (indexIdFound < 0)
-                        continue;
-
-                    if (indexIdFound == 0)
-                    {
-                        string oldValue = $"{_INDEX} 00";
-                        string newValue = $"{_INDEX} 01";
-                        list[inx] = list[inx].Replace(oldValue, newValue);
-                        list[inx + 1] = null; //remove next
-                        output.ChangeCount++;
-                        continue;
-                    }
-
-                    if (indexIdFound > 1)
-                    {
-                        if (input.RemoveSubIndexes)
-                            list[inx] = null;
-                        continue;
-                    }
-                }
-
-                //write new file
-                string dir = Path.GetDirectoryName(input.FullFileName);
-                output.NewFullFileName = Path.Combine(dir, input.NewFileName);
-
-                StreamWriter streamWriter = new StreamWriter(output.NewFullFileName);
-                foreach (string nline in list)
+            //write new file
+            using (StreamWriter streamWriter = new StreamWriter(_processFileOutput.NewFullFileName))
+            {
+                foreach (string nline in _lineList)
                 {
                     if (!String.IsNullOrEmpty(nline))
                         streamWriter.WriteLine(nline);
@@ -90,13 +114,8 @@ namespace CueRomovePreGap
                 streamWriter.Flush();
                 streamWriter.Close();
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-
-            return output;
         }
+
 
         private int GetTrackId(string text, int inx)
         {

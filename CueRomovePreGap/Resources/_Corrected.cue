@@ -13,7 +13,7 @@ FILE "Santana - Milagro.flac" WAVE
     TITLE "Somewhere In Heaven"
     PERFORMER "Santana"
     INDEX 01 07:37:20
-	TRACK 03 AUDIO
+  TRACK 03 AUDIO
     TITLE "Saja - Right On"
     PERFORMER "Santana"
     INDEX 01 17:32:60
